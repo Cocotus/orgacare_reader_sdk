@@ -1,0 +1,22 @@
+PODS:
+  - FlutterMacOS (1.0.0)
+  - orgacare_reader_sdk (0.0.1):
+    - FlutterMacOS
+
+DEPENDENCIES:
+  - FlutterMacOS (from `Flutter/ephemeral`)
+  - orgacare_reader_sdk (from `Flutter/ephemeral/.symlinks/plugins/orgacare_reader_sdk/macos`)
+
+EXTERNAL SOURCES:
+  FlutterMacOS:
+    :path: Flutter/ephemeral
+  orgacare_reader_sdk:
+    :path: Flutter/ephemeral/.symlinks/plugins/orgacare_reader_sdk/macos
+
+SPEC CHECKSUMS:
+  FlutterMacOS: 8f6f14fa908a6fb3fba0cd85dbd81ec4b251fb24
+  orgacare_reader_sdk: fe7444908075f703b8d99bf4984818d4102e5430
+
+PODFILE CHECKSUM: 236401fc2c932af29a9fcf0e97baeeb2d750d367
+
+COCOAPODS: 1.14.3
