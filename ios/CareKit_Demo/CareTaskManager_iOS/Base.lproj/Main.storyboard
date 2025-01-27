@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="tne-QT-ifu">
+            <objects>
+                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="CareTaskManager_iOS" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Aet-is-TmC">
+                                <rect key="frame" x="0.0" y="94" width="414" height="216"/>
+                            </pickerView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ihk-1m-bp2">
+                                <rect key="frame" x="50" y="360" width="314" height="31"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="filled" title="Connect"/>
+                                <connections>
+                                    <action selector="connectButtonAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="qUX-gB-UEj"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oHJ-CF-Zsq">
+                                <rect key="frame" x="50" y="441" width="314" height="31"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="filled" title="Load VSD"/>
+                                <connections>
+                                    <action selector="loadVSDButtonAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="XDC-JE-Atg"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="k5N-KG-VHn">
+                                <rect key="frame" x="50" y="522" width="314" height="31"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="filled" title="Load NFD"/>
+                                <connections>
+                                    <action selector="loadNFDButtonAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="add-7s-2Yu"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZJA-7a-N5z">
+                                <rect key="frame" x="50" y="603" width="314" height="31"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="filled" title="Load DPE"/>
+                                <connections>
+                                    <action selector="loadDPEButtonAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="BUI-Wm-GAg"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UIP-Y0-1eN">
+                                <rect key="frame" x="50" y="765" width="314" height="31"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="filled" title="Disconnect"/>
+                                <connections>
+                                    <action selector="disconnectButtonAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="KEq-BJ-7rr"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3lt-ZN-ddN">
+                                <rect key="frame" x="50" y="684" width="314" height="31"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="filled" title="Load AMTS"/>
+                                <connections>
+                                    <action selector="loadAMTSButtonAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Vrd-Yv-Atq"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="UIP-Y0-1eN" firstAttribute="top" secondItem="3lt-ZN-ddN" secondAttribute="bottom" constant="50" id="BfZ-et-O9i"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="3lt-ZN-ddN" secondAttribute="trailing" constant="50" id="E3i-fb-rRN"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="ihk-1m-bp2" secondAttribute="trailing" constant="50" id="EvE-1l-qci"/>
+                            <constraint firstItem="ZJA-7a-N5z" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="50" id="F1t-dW-G6m"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="UIP-Y0-1eN" secondAttribute="trailing" constant="50" id="F8b-pN-ECo"/>
+                            <constraint firstItem="ZJA-7a-N5z" firstAttribute="top" secondItem="k5N-KG-VHn" secondAttribute="bottom" constant="50" id="H1k-aQ-YQL"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="oHJ-CF-Zsq" secondAttribute="trailing" constant="50" id="J3b-fY-fYZ"/>
+                            <constraint firstItem="k5N-KG-VHn" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="50" id="KFh-He-qU8"/>
+                            <constraint firstItem="oHJ-CF-Zsq" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="50" id="NT1-Pq-XAc"/>
+                            <constraint firstItem="3lt-ZN-ddN" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="50" id="T7H-bT-rVt"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="ZJA-7a-N5z" secondAttribute="trailing" constant="50" id="Tdl-FP-yPh"/>
+                            <constraint firstItem="k5N-KG-VHn" firstAttribute="top" secondItem="oHJ-CF-Zsq" secondAttribute="bottom" constant="50" id="deQ-yN-dUV"/>
+                            <constraint firstItem="Aet-is-TmC" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="50" id="elc-iD-yP7"/>
+                            <constraint firstItem="3lt-ZN-ddN" firstAttribute="top" secondItem="ZJA-7a-N5z" secondAttribute="bottom" constant="50" id="gGh-ik-fIy"/>
+                            <constraint firstItem="Aet-is-TmC" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="p4m-O0-aOi"/>
+                            <constraint firstItem="ihk-1m-bp2" firstAttribute="top" secondItem="Aet-is-TmC" secondAttribute="bottom" constant="50" id="ttV-5r-asa"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="k5N-KG-VHn" secondAttribute="trailing" constant="50" id="u2O-aF-ppj"/>
+                            <constraint firstItem="UIP-Y0-1eN" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="50" id="uNg-NK-KGh"/>
+                            <constraint firstItem="oHJ-CF-Zsq" firstAttribute="top" secondItem="ihk-1m-bp2" secondAttribute="bottom" constant="50" id="uwZ-oA-o5P"/>
+                            <constraint firstItem="Aet-is-TmC" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="wQT-Xj-6jX"/>
+                            <constraint firstItem="ihk-1m-bp2" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="50" id="zjV-hd-hLE"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="devicePickerView" destination="Aet-is-TmC" id="On2-ur-Blr"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2.8985507246376816" y="128.57142857142856"/>
+        </scene>
+    </scenes>
+    <resources>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>
