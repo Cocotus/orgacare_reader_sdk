@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'card_data_manager.dart';
+import 'package:orgacare_reader_sdk/card_data_manager.dart';
+
 
 void main() {
   runApp(MyApp());
