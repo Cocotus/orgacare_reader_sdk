@@ -17,6 +17,13 @@ A new Flutter plugin project.
   s.dependency 'Flutter'
   s.platform = :ios, '12.0'
 
+  # Add the WHCCareKit_iOS framework
+    s.preserve_paths = 'WHCCareKit_iOS.xcframework'  # telling linker to include siprix framework
+    s.xcconfig = { 'OTHER_LDFLAGS' => '-framework WHCCareKit_iOS' }  # including siprix framework
+  s.vendored_frameworks = 'WHCCareKit_iOS.xcframework'
+  s.frameworks = 'WHCCareKit_iOS'
+   s.library = 'c++'
+
   # Flutter.framework does not contain a i386 slice.
   s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES', 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'i386' }
   s.swift_version = '5.0'
