@@ -26,4 +26,25 @@ abstract class OrgacareReaderSdkPlatform extends PlatformInterface {
   Future<String?> getPlatformVersion() {
     throw UnimplementedError('platformVersion() has not been implemented.');
   }
+
+
+  Future<String?> loadVSD() {
+    throw UnimplementedError('platformVersion() has not been implemented.');
+  }
+
+
+  Future<String?> loadNFD() {
+    throw UnimplementedError('platformVersion() has not been implemented.');
+  }
+
+
+  Future<String?> loadDPE() {
+    throw UnimplementedError('platformVersion() has not been implemented.');
+  }
+
+
+  Future<String?> loadAMTS() {
+    throw UnimplementedError('platformVersion() has not been implemented.');
+  }
+
 }

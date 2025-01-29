@@ -14,4 +14,28 @@ class MethodChannelOrgacareReaderSdk extends OrgacareReaderSdkPlatform {
     final version = await methodChannel.invokeMethod<String>('getPlatformVersion');
     return version;
   }
+
+  @override
+  Future<String?> loadVSD() async {
+    final data = await methodChannel.invokeMethod<String>('loadVSD');
+    return data;
+  }
+
+  @override
+  Future<String?> loadNFD() async {
+    final data = await methodChannel.invokeMethod<String>('loadNFD');
+    return data;
+  }
+
+  @override
+  Future<String?> loadDPE() async {
+    final data = await methodChannel.invokeMethod<String>('loadDPE');
+    return data;
+  }
+
+  @override
+  Future<String?> loadAMTS() async {
+    final data = await methodChannel.invokeMethod<String>('loadAMTS');
+    return data;
+  }
 }

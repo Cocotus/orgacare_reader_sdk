@@ -5,4 +5,21 @@ class OrgacareReaderSdk {
   Future<String?> getPlatformVersion() {
     return OrgacareReaderSdkPlatform.instance.getPlatformVersion();
   }
+
+  Future<String?> loadVSD() async {
+    return OrgacareReaderSdkPlatform.instance.loadVSD();
+  }
+
+  Future<String?> loadNFD() async {
+    return OrgacareReaderSdkPlatform.instance.loadNFD();
+  }
+
+  Future<String?> loadDPE() async {
+    return OrgacareReaderSdkPlatform.instance.loadDPE();
+  }
+
+  Future<String?> loadAMTS() async {
+    return OrgacareReaderSdkPlatform.instance.loadAMTS();
+  }
+
 }
