@@ -7,7 +7,8 @@ class OrgacareReaderSdk {
   }
 
   Future<String?> loadVSD() async {
-    return OrgacareReaderSdkPlatform.instance.loadVSD();
+    var result = await OrgacareReaderSdkPlatform.instance.loadVSD();
+    return result;
   }
 
   Future<String?> loadNFD() async {

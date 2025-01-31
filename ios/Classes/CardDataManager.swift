@@ -1,6 +1,7 @@
 import WHCCareKit_iOS
 
 class CarddataManager {
+
     private let bluetoothManager = CareBluetoothManager()
     private var taskManager: CareTaskManager?
 
