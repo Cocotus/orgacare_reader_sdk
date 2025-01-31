@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:orgacare_reader_sdk/orgacare_reader_sdk.dart';
 
-
 void main() {
   runApp(const MyApp());
 }
@@ -16,6 +15,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   String _platformVersion = 'Unknown';
+  String _feedback = 'No feedback yet';
   final _orgacareDemoPlugin = OrgacareReaderSdk();
 
   @override
@@ -46,40 +46,60 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
+  // Method to handle feedback updates
+  Future<void> _updateFeedback(String methodName, Future<String> Function() method) async {
+    try {
+      final result = await method();
+      setState(() {
+        _feedback = '$methodName: $result';
+      });
+    } catch (e) {
+      setState(() {
+        _feedback = '$methodName failed: $e';
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: Text('Card Data Manager'),
+          title: const Text('Card Data Manager'),
         ),
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
+              Text('Platform Version: $_platformVersion\n'),
+              Text('Feedback: $_feedback\n'),
               ElevatedButton(
-                onPressed: () async {
-                  await _orgacareDemoPlugin.loadVSD();
-                },
-                child: Text('Load VSD'),
+                onPressed: () => _updateFeedback('Load VSD', () async {
+                  final result = await _orgacareDemoPlugin.loadVSD();
+                  return result ?? 'No result';
+                }),
+                child: const Text('Load VSD'),
               ),
               ElevatedButton(
-                onPressed: () async {
-                  await _orgacareDemoPlugin.loadNFD();
-                },
-                child: Text('Load NFD'),
+                onPressed: () => _updateFeedback('Load NFD', () async {
+                  final result = await _orgacareDemoPlugin.loadNFD();
+                  return result ?? 'No result';
+                }),
+                child: const Text('Load NFD'),
               ),
               ElevatedButton(
-                onPressed: () async {
-                  await _orgacareDemoPlugin.loadDPE();
-                },
-                child: Text('Load DPE'),
+                onPressed: () => _updateFeedback('Load DPE', () async {
+                  final result = await _orgacareDemoPlugin.loadDPE();
+                  return result ?? 'No result';
+                }),
+                child: const Text('Load DPE'),
               ),
               ElevatedButton(
-                onPressed: () async {
-                  await _orgacareDemoPlugin.loadAMTS();
-                },
-                child: Text('Load AMTS'),
+                onPressed: () => _updateFeedback('Load AMTS', () async {
+                  final result = await _orgacareDemoPlugin.loadAMTS();
+                  return result ?? 'No result';
+                }),
+                child: const Text('Load AMTS'),
               ),
             ],
           ),

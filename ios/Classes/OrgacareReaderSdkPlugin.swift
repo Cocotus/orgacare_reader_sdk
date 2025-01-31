@@ -2,9 +2,6 @@ import Flutter
 import UIKit
 import WHCCareKit_iOS
 
-import Flutter
-import UIKit
-
 public class OrgacareReaderSdkPlugin: NSObject, FlutterPlugin {
 
   public static func register(with registrar: FlutterPluginRegistrar) {
@@ -15,25 +12,36 @@ public class OrgacareReaderSdkPlugin: NSObject, FlutterPlugin {
 
   public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
     switch call.method {
-     case "getPlatformVersion":
-          result("iOS " + UIDevice.current.systemVersion)
-     case "loadVSD":
-          print("Jetzt passiert etwas")
-          let cardDataManager = CarddataManager()
-          result("iOS " + UIDevice.current.systemVersion)
-     //   var cardDataManager: CarddataManager
-        cardDataManager?.loadVSD()
-        result(nil)
-      case "loadNFD":
+    case "getPlatformVersion":
+        let platformVersion = "iOS " + UIDevice.current.systemVersion
+        print(platformVersion)
+        result(platformVersion)
+    case "loadVSD":
+        print("loadVSD called")
+        let cardDataManager = CarddataManager()
+        cardDataManager.loadVSD()
+        let feedback = "loadVSD called successfully"
+        print(feedback)
+        result(feedback)
+    case "loadNFD":
+        print("loadNFD called")
         // self?.cardDataManager?.loadNFD()
-        result(nil)
-      case "loadDPE":
-    //    self?.cardDataManager?.loadDPE()
-        result(nil)
-      case "loadAMTS":
-       // self?.cardDataManager?.loadAMTS()
-        result(nil)
-      default:
+        let feedback = "loadNFD called successfully"
+        print(feedback)
+        result(feedback)
+    case "loadDPE":
+        print("loadDPE called")
+        // self?.cardDataManager?.loadDPE()
+        let feedback = "loadDPE called successfully"
+        print(feedback)
+        result(feedback)
+    case "loadAMTS":
+        print("loadAMTS called")
+        // self?.cardDataManager?.loadAMTS()
+        let feedback = "loadAMTS called successfully"
+        print(feedback)
+        result(feedback)
+    default:
         result(FlutterMethodNotImplemented)
     }
   }
