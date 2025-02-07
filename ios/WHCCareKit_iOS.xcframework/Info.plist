@@ -2,9 +2,11 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+x
 	<key>AvailableLibraries</key>
 	<array>
 		<dict>
+
 			<key>BinaryPath</key>
 			<string>WHCCareKit_iOS.framework/WHCCareKit_iOS</string>
 			<key>LibraryIdentifier</key>
@@ -40,5 +42,9 @@
 	<string>XFWK</string>
 	<key>XCFrameworkFormatVersion</key>
 	<string>1.0</string>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+    <string>Our app uses bluetooth to find, connect and transfer data between different devices.</string>
+    <key>NSBluetoothPeripheralUsageDescription</key>
+    <string>Our app uses bluetooth to find, connect and transfer data between different devices.</string>
 </dict>
 </plist>

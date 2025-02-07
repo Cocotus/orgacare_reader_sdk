@@ -4,45 +4,44 @@ import WHCCareKit_iOS
 
 public class OrgacareReaderSdkPlugin: NSObject, FlutterPlugin {
 
+  private static var channel: FlutterMethodChannel?
+
   public static func register(with registrar: FlutterPluginRegistrar) {
-    let channel = FlutterMethodChannel(name: "orgacare_reader_sdk", binaryMessenger: registrar.messenger())
+    channel = FlutterMethodChannel(name: "orgacare_reader_sdk", binaryMessenger: registrar.messenger())
     let instance = OrgacareReaderSdkPlugin()
-    registrar.addMethodCallDelegate(instance, channel: channel)
+    registrar.addMethodCallDelegate(instance, channel: channel!)
   }
 
   public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
+    guard let channel = OrgacareReaderSdkPlugin.channel else {
+        result(FlutterError(code: "UNAVAILABLE", message: "Method channel unavailable", details: nil))
+        return
+    }
+    let cardDataManager = CarddataManager(channel: channel)
     switch call.method {
     case "getPlatformVersion":
         let platformVersion = "iOS " + UIDevice.current.systemVersion
-        print(platformVersion)
+        cardDataManager.sendLog("getPlatformVersion called: \(platformVersion)")
         result(platformVersion)
     case "loadVSD":
-        print("loadVSD called")
-        let cardDataManager = CarddataManager()
         cardDataManager.loadVSD()
-        let feedback = "loadVSD called successfully"
-        print(feedback)
-        result(feedback)
+        result("loadVSD called")
     case "loadNFD":
-        print("loadNFD called")
-        // self?.cardDataManager?.loadNFD()
-        let feedback = "loadNFD called successfully"
-        print(feedback)
-        result(feedback)
+        cardDataManager.loadNFD()
+        result("loadNFD called")
     case "loadDPE":
-        print("loadDPE called")
-        // self?.cardDataManager?.loadDPE()
-        let feedback = "loadDPE called successfully"
-        print(feedback)
-        result(feedback)
+        cardDataManager.loadDPE()
+        result("loadDPE called")
     case "loadAMTS":
-        print("loadAMTS called")
-        // self?.cardDataManager?.loadAMTS()
-        let feedback = "loadAMTS called successfully"
-        print(feedback)
-        result(feedback)
+        cardDataManager.loadAMTS()
+        result("loadAMTS called")
     default:
         result(FlutterMethodNotImplemented)
     }
+  }
+
+  // Change the access level of sendLog to internal or public
+ public func sendLog(_ message: String) {
+    OrgacareReaderSdkPlugin.channel?.invokeMethod("log", arguments: message)
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:orgacare_reader_sdk/orgacare_reader_sdk.dart';
+import 'package:xml/xml.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,28 +18,75 @@ class _MyAppState extends State<MyApp> {
   String _platformVersion = 'Unknown';
   String _feedback = 'No feedback yet';
   final _orgacareDemoPlugin = OrgacareReaderSdk();
+  static const platform = MethodChannel('orgacare_reader_sdk');
+  List<String> _logs = [];
 
   @override
   void initState() {
     super.initState();
     initPlatformState();
+    platform.setMethodCallHandler(_handleMethodCall);
   }
 
-  // Platform messages are asynchronous, so we initialize in an async method.
+  Future<void> _handleMethodCall(MethodCall call) async {
+    switch (call.method) {
+      case 'log':
+        setState(() {
+          _logs.add(call.arguments);
+        });
+        break;
+    }
+  }
+
   Future<void> initPlatformState() async {
     String platformVersion;
-    // Platform messages may fail, so we use a try/catch PlatformException.
-    // We also handle the message potentially returning null.
     try {
+
+      String xmlString = '''<?xml version="1.0" encoding="ISO-8859-15" standalone="yes"?>
+  <UC_PersoenlicheVersichertendatenXML CDM_VERSION="5.2.0" xmlns="http://ws.gematik.de/fa/vsdm/vsd/v5.2">
+    <Versicherter>
+      <Versicherten_ID>V929324877</Versicherten_ID>
+      <Person>
+        <Geburtsdatum>19831001</Geburtsdatum>
+        <Vorname>Peter</Vorname>
+        <Nachname>Müller</Nachname>
+        <Geschlecht>M</Geschlecht>
+        <StrassenAdresse>
+          <Postleitzahl>49716</Postleitzahl>
+          <Ort>Meppen</Ort>
+          <Land>
+            <Wohnsitzlaendercode>D</Wohnsitzlaendercode>
+          </Land>
+          <Strasse>Uhlandstr.</Strasse>
+          <Hausnummer>12</Hausnummer>
+        </StrassenAdresse>
+      </Person>
+    </Versicherter>
+  </UC_PersoenlicheVersichertendatenXML>''';
+
+      // Parse the XML
+      final document = XmlDocument.parse(xmlString);
+
+      // Extract specific values
+      final geburtsdatum = document.findAllElements('Geburtsdatum').first.innerText;
+      final vorname = document.findAllElements('Vorname').first.innerText;
+      final nachname = document.findAllElements('Nachname').first.innerText;
+      final geschlecht = document.findAllElements('Geschlecht').first.innerText;
+      final ort = document.findAllElements('Ort').first.innerText;
+
+      // Print extracted values
+      print("Geburtsdatum: $geburtsdatum"); // 19831001
+      print("Vorname: $vorname"); // Peter
+      print("Nachname: $nachname"); // Müller
+      print("Geschlecht: $geschlecht"); // M
+      print("Ort: $ort"); // Meppen
+
       platformVersion =
           await _orgacareDemoPlugin.getPlatformVersion() ?? 'Unknown platform version';
     } on PlatformException {
       platformVersion = 'Failed to get platform version.';
     }
 
-    // If the widget was removed from the tree while the asynchronous platform
-    // message was in flight, we want to discard the reply rather than calling
-    // setState to update our non-existent appearance.
     if (!mounted) return;
 
     setState(() {
@@ -46,7 +94,6 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
-  // Method to handle feedback updates
   Future<void> _updateFeedback(String methodName, Future<String> Function() method) async {
     try {
       final result = await method();
@@ -100,6 +147,16 @@ class _MyAppState extends State<MyApp> {
                   return result ?? 'No result';
                 }),
                 child: const Text('Load AMTS'),
+              ),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: _logs.length,
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      title: Text(_logs[index]),
+                    );
+                  },
+                ),
               ),
             ],
           ),

@@ -6,20 +6,20 @@ class OrgacareReaderSdk {
     return OrgacareReaderSdkPlatform.instance.getPlatformVersion();
   }
 
-  Future<String?> loadVSD() async {
-    var result = await OrgacareReaderSdkPlatform.instance.loadVSD();
+  Future<String?> loadVSD()  {
+    var result =  OrgacareReaderSdkPlatform.instance.loadVSD();
     return result;
   }
 
-  Future<String?> loadNFD() async {
+  Future<String?> loadNFD()  {
     return OrgacareReaderSdkPlatform.instance.loadNFD();
   }
 
-  Future<String?> loadDPE() async {
+  Future<String?> loadDPE()  {
     return OrgacareReaderSdkPlatform.instance.loadDPE();
   }
 
-  Future<String?> loadAMTS() async {
+  Future<String?> loadAMTS() {
     return OrgacareReaderSdkPlatform.instance.loadAMTS();
   }
 

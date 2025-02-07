@@ -17,6 +17,7 @@ dependencies:
   flutter:
     sdk: flutter
 
+  xml: ^6.5.0
   orgacare_reader_sdk:
     # When depending on this package from a real application you should use:
     #   orgacare_reader_sdk: ^x.y.z
