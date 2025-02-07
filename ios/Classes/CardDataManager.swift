@@ -31,7 +31,7 @@ class CarddataManager {
     func loadVSD() {
         startBluetoothDiscovery()
         taskManager?.loadVSD()
-        sendLog("Lese VSD Daten aus....")
+        print("Lese VSD Daten aus....")
     }
 
     func loadNFD() {
@@ -70,7 +70,7 @@ class CarddataManager {
 
     func notifyDeviceIsLocked() {
         DispatchQueue.main.async {
-            self.sendLog("Kartenlesser ist gesperrt! Auslesen nicht möglich")
+            self.sendLog("Kartenleser ist gesperrt! Auslesen nicht möglich")
             self.channel?.invokeMethod("deviceIsLocked", arguments: nil)
         }
     }
@@ -95,7 +95,7 @@ extension CarddataManager: CareBluetoothManagerDelegate {
     func careBluetoothManager(didConnect ctapi: CTorgios) {
         taskManager = CareTaskManager(ctapi: ctapi, delegate: self) {
             self.taskManager?.loadVSD()
-            self.sendLog("Karte wird ausgelesen....")
+            print("Karte wird ausgelesen....")
         }
     }
 }
@@ -119,26 +119,26 @@ extension CarddataManager: CareTaskManagerDelegate {
     }
 
     func careTaskManager(didLoadVSD dataset: [Data]) {
-        handleLoadedData(Array(dataset.dropFirst()), title: "Sonstiges")
+        handleLoadedData(Array(dataset.dropFirst()), title: "Sonstiges", doSendLog: false)
     }
 
     func careTaskManager(didLoadVSD_KVK dataset: Data) {
-        handleLoadedData([dataset], title: "KVK Versichertendaten")
+        handleLoadedData([dataset], title: "KVK Versichertendaten", doSendLog: true)
     }
 
     func careTaskManager(didLoadNFD dataset: [Data]) {
-        handleLoadedData(dataset, title: "NFD Daten")
+        handleLoadedData(dataset, title: "NFD Daten", doSendLog: true)
     }
 
     func careTaskManager(didLoadDPE dataset: [Data]) {
-        handleLoadedData(dataset, title: "DPE Daten")
+        handleLoadedData(dataset, title: "DPE Daten", doSendLog: true)
     }
 
     func careTaskManager(didLoadAMTS dataset: [Data]) {
-        handleLoadedData(dataset, title: "AMTS Daten")
+        handleLoadedData(dataset, title: "AMTS Daten", doSendLog: true)
     }
 
-    private func handleLoadedData(_ dataset: [Data], title: String) {
+    private func handleLoadedData(_ dataset: [Data], title: String, doSendLog: Bool) {
         let encoding = CFStringConvertEncodingToNSStringEncoding(CFStringEncoding(CFStringEncodings.isoLatin9.rawValue))
         let isoEncoding = String.Encoding(rawValue: encoding)
         var dataStrings: [String] = []
@@ -146,7 +146,12 @@ extension CarddataManager: CareTaskManagerDelegate {
         for data in dataset {
             if let decodedString = String(data: data, encoding: isoEncoding) {
                 dataStrings.append(decodedString)
-                sendLog("\(title): \(decodedString)")
+                if doSendLog {
+                    print("\(title): \(decodedString)")
+                    sendLog("\(title): \(decodedString)")
+                } else {
+                    print("\(title): \(decodedString)")
+                }
             } else {
                 sendLog("Fehler beim Dekodieren der Daten")
             }

@@ -37,15 +37,4 @@ public class OrgacareReaderSdkPlugin: NSObject, FlutterPlugin {
     }
   }
 
-  public func sendLog(_ message: String) {
-    DispatchQueue.main.async {
-        OrgacareReaderSdkPlugin.channel?.invokeMethod("log", arguments: message)
-    }
-  }
-
-  public func sendDataToFlutter(_ data: [String]) {
-    DispatchQueue.main.async {
-        OrgacareReaderSdkPlugin.channel?.invokeMethod("data", arguments: data)
-    }
-  }
 }
