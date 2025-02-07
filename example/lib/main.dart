@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:orgacare_reader_sdk/orgacare_reader_sdk.dart';
-import 'package:xml/xml.dart';
 
 void main() {
   runApp(const MyApp());
@@ -20,6 +19,8 @@ class _MyAppState extends State<MyApp> {
   final _orgacareDemoPlugin = OrgacareReaderSdk();
   static const platform = MethodChannel('orgacare_reader_sdk');
   List<String> _logs = [];
+  List<String> _data = [];
+  bool _isDeviceLocked = false;
 
   @override
   void initState() {
@@ -35,52 +36,22 @@ class _MyAppState extends State<MyApp> {
           _logs.add(call.arguments);
         });
         break;
+      case 'data':
+        setState(() {
+          _data = List<String>.from(call.arguments);
+        });
+        break;
+      case 'deviceIsLocked':
+        setState(() {
+          _isDeviceLocked = true;
+        });
+        break;
     }
   }
 
   Future<void> initPlatformState() async {
     String platformVersion;
     try {
-
-      String xmlString = '''<?xml version="1.0" encoding="ISO-8859-15" standalone="yes"?>
-  <UC_PersoenlicheVersichertendatenXML CDM_VERSION="5.2.0" xmlns="http://ws.gematik.de/fa/vsdm/vsd/v5.2">
-    <Versicherter>
-      <Versicherten_ID>V929324877</Versicherten_ID>
-      <Person>
-        <Geburtsdatum>19831001</Geburtsdatum>
-        <Vorname>Peter</Vorname>
-        <Nachname>Müller</Nachname>
-        <Geschlecht>M</Geschlecht>
-        <StrassenAdresse>
-          <Postleitzahl>49716</Postleitzahl>
-          <Ort>Meppen</Ort>
-          <Land>
-            <Wohnsitzlaendercode>D</Wohnsitzlaendercode>
-          </Land>
-          <Strasse>Uhlandstr.</Strasse>
-          <Hausnummer>12</Hausnummer>
-        </StrassenAdresse>
-      </Person>
-    </Versicherter>
-  </UC_PersoenlicheVersichertendatenXML>''';
-
-      // Parse the XML
-      final document = XmlDocument.parse(xmlString);
-
-      // Extract specific values
-      final geburtsdatum = document.findAllElements('Geburtsdatum').first.innerText;
-      final vorname = document.findAllElements('Vorname').first.innerText;
-      final nachname = document.findAllElements('Nachname').first.innerText;
-      final geschlecht = document.findAllElements('Geschlecht').first.innerText;
-      final ort = document.findAllElements('Ort').first.innerText;
-
-      // Print extracted values
-      print("Geburtsdatum: $geburtsdatum"); // 19831001
-      print("Vorname: $vorname"); // Peter
-      print("Nachname: $nachname"); // Müller
-      print("Geschlecht: $geschlecht"); // M
-      print("Ort: $ort"); // Meppen
-
       platformVersion =
           await _orgacareDemoPlugin.getPlatformVersion() ?? 'Unknown platform version';
     } on PlatformException {
@@ -120,6 +91,9 @@ class _MyAppState extends State<MyApp> {
             children: <Widget>[
               Text('Platform Version: $_platformVersion\n'),
               Text('Feedback: $_feedback\n'),
+              _isDeviceLocked
+                  ? Text('Device is locked', style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold))
+                  : Container(),
               ElevatedButton(
                 onPressed: () => _updateFeedback('Load VSD', () async {
                   final result = await _orgacareDemoPlugin.loadVSD();
@@ -154,6 +128,16 @@ class _MyAppState extends State<MyApp> {
                   itemBuilder: (context, index) {
                     return ListTile(
                       title: Text(_logs[index]),
+                    );
+                  },
+                ),
+              ),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: _data.length,
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      title: Text(_data[index]),
                     );
                   },
                 ),

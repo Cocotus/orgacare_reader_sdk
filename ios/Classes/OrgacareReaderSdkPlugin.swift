@@ -10,38 +10,42 @@ public class OrgacareReaderSdkPlugin: NSObject, FlutterPlugin {
     channel = FlutterMethodChannel(name: "orgacare_reader_sdk", binaryMessenger: registrar.messenger())
     let instance = OrgacareReaderSdkPlugin()
     registrar.addMethodCallDelegate(instance, channel: channel!)
+    // Initialize the singleton with the FlutterMethodChannel
+    CarddataManager.shared.initialize(channel: channel!)
   }
 
   public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-    guard let channel = OrgacareReaderSdkPlugin.channel else {
-        result(FlutterError(code: "UNAVAILABLE", message: "Method channel unavailable", details: nil))
-        return
-    }
-    let cardDataManager = CarddataManager(channel: channel)
     switch call.method {
     case "getPlatformVersion":
         let platformVersion = "iOS " + UIDevice.current.systemVersion
-        cardDataManager.sendLog("getPlatformVersion called: \(platformVersion)")
+        CarddataManager.shared.sendLog("getPlatformVersion called: \(platformVersion)")
         result(platformVersion)
     case "loadVSD":
-        cardDataManager.loadVSD()
+        CarddataManager.shared.loadVSD()
         result("loadVSD called")
     case "loadNFD":
-        cardDataManager.loadNFD()
+        CarddataManager.shared.loadNFD()
         result("loadNFD called")
     case "loadDPE":
-        cardDataManager.loadDPE()
+        CarddataManager.shared.loadDPE()
         result("loadDPE called")
     case "loadAMTS":
-        cardDataManager.loadAMTS()
+        CarddataManager.shared.loadAMTS()
         result("loadAMTS called")
     default:
         result(FlutterMethodNotImplemented)
     }
   }
 
-  // Change the access level of sendLog to internal or public
- public func sendLog(_ message: String) {
-    OrgacareReaderSdkPlugin.channel?.invokeMethod("log", arguments: message)
+  public func sendLog(_ message: String) {
+    DispatchQueue.main.async {
+        OrgacareReaderSdkPlugin.channel?.invokeMethod("log", arguments: message)
+    }
+  }
+
+  public func sendDataToFlutter(_ data: [String]) {
+    DispatchQueue.main.async {
+        OrgacareReaderSdkPlugin.channel?.invokeMethod("data", arguments: data)
+    }
   }
 }
