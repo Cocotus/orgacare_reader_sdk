@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:xml/xml.dart';
 import 'package:orgacare_reader_sdk/orgacare_reader_sdk.dart';
 
 void main() {
@@ -18,9 +19,16 @@ class _MyAppState extends State<MyApp> {
   String _feedback = 'No feedback yet';
   final _orgacareDemoPlugin = OrgacareReaderSdk();
   static const platform = MethodChannel('orgacare_reader_sdk');
-  List<String> _logs = [];
-  List<String> _data = [];
+  List<String> _logsAndData = [];
   bool _isDeviceLocked = false;
+  bool _noDataMobileMode = false;
+
+  final List<String> _nodesToDisplay = [
+    'geburtsdatum', 'vorname', 'nachname', 'geschlecht', 'titel',
+    'postleitzahl', 'ort', 'wohnsitzlaendercode', 'strasse', 'hausnummer',
+    'beginn', 'kostentraegerkennung', 'kostentraegerlaendercode', 'name',
+    'versichertenart', 'versicherten_id'
+  ];
 
   @override
   void initState() {
@@ -33,17 +41,24 @@ class _MyAppState extends State<MyApp> {
     switch (call.method) {
       case 'log':
         setState(() {
-          _logs.add(call.arguments);
+          _logsAndData.add(call.arguments);
         });
         break;
       case 'data':
         setState(() {
-          _data = List<String>.from(call.arguments);
+          final dataStrings = List<String>.from(call.arguments);
+          final filteredDataNodes = _parseAndFilterXmlData(dataStrings);
+          _logsAndData.addAll(filteredDataNodes.map((node) => '${node.keys.first}: ${node.values.first}'));
         });
         break;
       case 'deviceIsLocked':
         setState(() {
           _isDeviceLocked = true;
+        });
+        break;
+      case 'noDataMobileMode':
+        setState(() {
+          _noDataMobileMode = true;
         });
         break;
     }
@@ -78,6 +93,41 @@ class _MyAppState extends State<MyApp> {
     }
   }
 
+  List<Map<String, String>> _parseAndFilterXmlData(List<String> dataStrings) {
+    List<Map<String, String>> nodes = [];
+    for (var data in dataStrings) {
+      final document = XmlDocument.parse(data);
+      final elements = document.findAllElements('*');
+      for (var element in elements) {
+        final nodeName = element.name.toString().toLowerCase();
+        if (_nodesToDisplay.contains(nodeName)) {
+          final nodeContent = element.innerText;
+          final formattedContent = _formatNodeContent(nodeName, nodeContent);
+          nodes.add({element.name.toString(): formattedContent});
+        }
+      }
+    }
+    return nodes;
+  }
+
+  String _formatNodeContent(String nodeName, String content) {
+    if ((nodeName == 'geburtsdatum' || nodeName == 'beginn') && content.length == 8) {
+      final year = content.substring(0, 4);
+      final month = content.substring(4, 6);
+      final day = content.substring(6, 8);
+      return '$day.$month.$year';
+    }
+    return content;
+  }
+
+  void _clearLogsAndData() {
+    setState(() {
+      _logsAndData.clear();
+      _isDeviceLocked = false;
+      _noDataMobileMode = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -91,14 +141,18 @@ class _MyAppState extends State<MyApp> {
             children: <Widget>[
               Text('Platform Version: $_platformVersion\n'),
               Text('Feedback: $_feedback\n'),
-              _isDeviceLocked
-                  ? Text('Device is locked', style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold))
-                  : Container(),
+              if (_isDeviceLocked)
+                Text('Device is locked', style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold)),
+              if (_noDataMobileMode)
+                Text('No card inserted', style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold)),
               ElevatedButton(
-                onPressed: () => _updateFeedback('Load VSD', () async {
-                  final result = await _orgacareDemoPlugin.loadVSD();
-                  return result ?? 'No result';
-                }),
+                onPressed: () {
+                  _clearLogsAndData();
+                  _updateFeedback('Load VSD', () async {
+                    final result = await _orgacareDemoPlugin.loadVSD();
+                    return result ?? 'No result';
+                  });
+                },
                 child: const Text('Load VSD'),
               ),
               ElevatedButton(
@@ -124,20 +178,10 @@ class _MyAppState extends State<MyApp> {
               ),
               Expanded(
                 child: ListView.builder(
-                  itemCount: _logs.length,
+                  itemCount: _logsAndData.length,
                   itemBuilder: (context, index) {
                     return ListTile(
-                      title: Text(_logs[index]),
-                    );
-                  },
-                ),
-              ),
-              Expanded(
-                child: ListView.builder(
-                  itemCount: _data.length,
-                  itemBuilder: (context, index) {
-                    return ListTile(
-                      title: Text(_data[index]),
+                      title: Text(_logsAndData[index]),
                     );
                   },
                 ),
